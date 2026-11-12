@@ -15,8 +15,8 @@ from io import BytesIO
 
 import numpy as np
 import pandas as pd
-import plotly.express as px
-import plotly.graph_objects as go
+import plotly.express as px  # type: ignore[reportMissingTypeStubs]
+import plotly.graph_objects as go  # type: ignore[reportMissingTypeStubs]
 import streamlit as st
 
 # ---------------------------------------------------------
@@ -318,7 +318,7 @@ section[data-testid="stSidebar"] * { color: #E5E7EB !important; }
 # =========================================================
 # GENERIC HELPERS
 # =========================================================
-def fmt_num(x) -> str:
+def fmt_num(x: float | int | np.number | None) -> str:
     if x is None or not np.isfinite(x):
         return "–"
     a = abs(x)
@@ -331,9 +331,9 @@ def fmt_num(x) -> str:
     return f"{x:,.2f}"
 
 
-def _premium_fig(fig, height=380):
+def _premium_fig(fig: go.Figure, height: int = 380) -> go.Figure:
     """Apply consistent premium dark chart styling."""
-    fig.update_layout(
+    fig.update_layout(  # type: ignore[reportUnknownMemberType]
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="rgba(11,30,54,0.35)",
         font=dict(color="#E5E7EB", size=13, family="Inter, Segoe UI, sans-serif"),
@@ -347,7 +347,7 @@ def _premium_fig(fig, height=380):
     return fig
 
 
-def show_chart(fig, height=380):
+def show_chart(fig: go.Figure, height: int = 380) -> None:
     fig = _premium_fig(fig, height)
     try:
         st.plotly_chart(fig, width="stretch", config={"displaylogo": False})
@@ -355,11 +355,11 @@ def show_chart(fig, height=380):
         st.plotly_chart(fig, use_container_width=True, config={"displaylogo": False})
 
 
-def show_df(data):
+def show_df(data: pd.DataFrame) -> None:
     try:
-        st.dataframe(data, width="stretch", hide_index=True)
+        st.dataframe(data, width="stretch", hide_index=True)  # type: ignore[reportUnknownMemberType]
     except TypeError:
-        st.dataframe(data, use_container_width=True, hide_index=True)
+        st.dataframe(data, use_container_width=True, hide_index=True)  # type: ignore[reportUnknownMemberType]
 
 
 def _unique_names(cols) -> list:
@@ -714,7 +714,7 @@ def render_header(name: str, sheet, n_filtered: int, n_total: int, loaded_at: da
     sheet_txt = f" · sheet {html.escape(str(sheet))}" if sheet else ""
     st.markdown(
         f'<div class="app-header">'
-        f'<h1>🚀 Business Copilot AI</h1>'
+        f'<h1>🚀 INSIGHTFORGE-AI 🚀</h1>'
         f'<p>{html.escape(name)}{sheet_txt} · '
         f'<strong>{n_filtered:,}</strong> of {n_total:,} records · '
         f'loaded {loaded_at:%d-%b-%Y %H:%M}</p>'
